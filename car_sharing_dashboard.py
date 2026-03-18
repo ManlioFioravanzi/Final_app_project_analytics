@@ -10,7 +10,7 @@ st.title("🚗 Car Sharing Dashboard")
 # 1. Load Data
 # ─────────────────────────────────────────────
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "Session-04-car_sharing_data_for_Streamlit")
+DATA_DIR = os.path.dirname(__file__)
 
 @st.cache_data
 def load_data():
