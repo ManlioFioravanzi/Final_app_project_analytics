@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 
 st.set_page_config(page_title="Car Sharing Dashboard", layout="wide")
 
@@ -9,7 +10,7 @@ st.title("🚗 Car Sharing Dashboard")
 # 1. Load Data
 # ─────────────────────────────────────────────
 
-DATA_DIR = "Session-04-car_sharing_data_for_Streamlit"
+DATA_DIR = os.path.join(os.path.dirname(__file__), "Session-04-car_sharing_data_for_Streamlit")
 
 @st.cache_data
 def load_data():
