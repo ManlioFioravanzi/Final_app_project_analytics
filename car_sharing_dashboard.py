@@ -77,13 +77,28 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Data Loading ──────────────────────────────────────────────────────────────
-DATA_DIR = os.path.join(os.path.dirname(__file__), "Session-04-car_sharing_data_for_Streamlit")
+BASE = os.path.dirname(__file__)
+
+def _find_csv(filename):
+    """Try common folder locations for the CSV files."""
+    candidates = [
+        os.path.join(BASE, filename),
+        os.path.join(BASE, "datasets", filename),
+        os.path.join(BASE, "data", filename),
+        os.path.join(BASE, "Session-04-car_sharing_data_for_Streamlit", filename),
+    ]
+    for path in candidates:
+        if os.path.exists(path):
+            return path
+    raise FileNotFoundError(
+        f"Cannot find '{filename}'. Checked:\n" + "\n".join(candidates)
+    )
 
 @st.cache_data
 def load_data():
-    trips  = pd.read_csv(f"{DATA_DIR}/trips.csv")
-    cars   = pd.read_csv(f"{DATA_DIR}/cars.csv")
-    cities = pd.read_csv(f"{DATA_DIR}/cities.csv")
+    trips  = pd.read_csv(_find_csv("trips.csv"))
+    cars   = pd.read_csv(_find_csv("cars.csv"))
+    cities = pd.read_csv(_find_csv("cities.csv"))
     return trips, cars, cities
 
 trips, cars, cities = load_data()
