@@ -342,12 +342,16 @@ with tab2:
     # ── Arc Map ───────────────────────────────────────────────────────────────
     st.markdown("#### ✈️ Trip Routes (Arc Map)")
 
-    # Trips are local (< 5 km) — pick the city with most trips and zoom in
+    # Pick city with most trips, use exact city coords for reliable centering
     top_city_name = df["city_name"].value_counts().idxmax()
     arc_city_df = df[df["city_name"] == top_city_name]
     arc_sample = arc_city_df[["pickup_lat", "pickup_lon", "dropoff_lat", "dropoff_lon"]].dropna().sample(
         n=min(300, len(arc_city_df)), random_state=42
     )
+    city_row = cities[cities["city_name"] == top_city_name].iloc[0]
+    center_lat = float(city_row["city_lat"])
+    center_lon = float(city_row["city_long"])
+
     st.caption(f"300 trips in **{top_city_name}** — blue = pickup · red = dropoff")
 
     st.pydeck_chart(pdk.Deck(
@@ -355,20 +359,22 @@ with tab2:
             "ArcLayer", data=arc_sample,
             get_source_position=["pickup_lon", "pickup_lat"],
             get_target_position=["dropoff_lon", "dropoff_lat"],
-            get_source_color=[30, 120, 255, 200],
-            get_target_color=[255, 60, 60, 200],
+            get_source_color=[30, 120, 255, 220],
+            get_target_color=[255, 60, 60, 220],
             auto_highlight=True,
             width_min_pixels=2,
-            width_max_pixels=5,
+            width_max_pixels=6,
             pickable=True,
         )],
         initial_view_state=pdk.ViewState(
-            latitude=arc_sample["pickup_lat"].mean(),
-            longitude=arc_sample["pickup_lon"].mean(),
-            zoom=11, pitch=45,
+            latitude=center_lat,
+            longitude=center_lon,
+            zoom=12,
+            pitch=40,
+            bearing=0,
         ),
         map_style=CARTO_LIGHT,
-    ))
+    ), height=500)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # TAB 3 — Data Preview
