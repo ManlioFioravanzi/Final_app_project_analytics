@@ -241,7 +241,7 @@ with tab1:
 # ══════════════════════════════════════════════════════════════════════════════
 with tab2:
 
-    CARTO_DARK = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+    CARTO_LIGHT = "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
 
     # ── Heatmap ───────────────────────────────────────────────────────────────
     st.markdown("#### 🔥 Trip Pickup Heatmap")
@@ -275,7 +275,7 @@ with tab2:
             longitude=heatmap_data["lon"].mean(),
             zoom=4, pitch=0,
         ),
-        map_style=CARTO_DARK,
+        map_style=CARTO_LIGHT,
     ))
 
     st.markdown("---")
@@ -315,7 +315,7 @@ with tab2:
             longitude=city_map_df["city_long"].mean(),
             zoom=3.5, pitch=30,
         ),
-        map_style=CARTO_DARK,
+        map_style=CARTO_LIGHT,
         tooltip={
             "html": "<b>{city_name}</b><br/>Revenue: €{total_revenue}<br/>Trips: {trip_count}",
             "style": {"backgroundColor": "#1e2130", "color": "#ffffff"},
@@ -326,28 +326,33 @@ with tab2:
 
     # ── Arc Map ───────────────────────────────────────────────────────────────
     st.markdown("#### ✈️ Trip Routes (Arc Map)")
-    st.caption("Sample of 500 trips — arcs connect pickup to dropoff · width = revenue")
 
-    arc_sample = df[["pickup_lat", "pickup_lon", "dropoff_lat", "dropoff_lon", "revenue"]].dropna().sample(
-        n=min(500, len(df)), random_state=42
+    # Trips are local (< 5 km) — pick the city with most trips and zoom in
+    top_city_name = df["city_name"].value_counts().idxmax()
+    arc_city_df = df[df["city_name"] == top_city_name]
+    arc_sample = arc_city_df[["pickup_lat", "pickup_lon", "dropoff_lat", "dropoff_lon"]].dropna().sample(
+        n=min(300, len(arc_city_df)), random_state=42
     )
+    st.caption(f"300 trips in **{top_city_name}** — blue = pickup · red = dropoff")
+
     st.pydeck_chart(pdk.Deck(
         layers=[pdk.Layer(
             "ArcLayer", data=arc_sample,
             get_source_position=["pickup_lon", "pickup_lat"],
             get_target_position=["dropoff_lon", "dropoff_lat"],
-            get_source_color=[0, 128, 255, 160],
-            get_target_color=[255, 80, 50, 160],
+            get_source_color=[30, 120, 255, 200],
+            get_target_color=[255, 60, 60, 200],
             auto_highlight=True,
-            width_scale=0.0001, get_width="revenue",
-            width_min_pixels=1, width_max_pixels=4, pickable=True,
+            width_min_pixels=2,
+            width_max_pixels=5,
+            pickable=True,
         )],
         initial_view_state=pdk.ViewState(
             latitude=arc_sample["pickup_lat"].mean(),
             longitude=arc_sample["pickup_lon"].mean(),
-            zoom=4, pitch=45,
+            zoom=11, pitch=45,
         ),
-        map_style=CARTO_DARK,
+        map_style=CARTO_LIGHT,
     ))
 
 # ══════════════════════════════════════════════════════════════════════════════
