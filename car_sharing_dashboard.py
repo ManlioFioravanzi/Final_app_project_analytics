@@ -59,52 +59,16 @@ st.markdown("""
         margin: 12px 0 4px 0;
     }
 
-    /* Tabs container */
-    div[data-testid="stTabs"] {
-        background-color: #f0f2f8;
-        border-radius: 14px;
-        padding: 6px 8px;
-        margin-bottom: 20px;
-        border: 1px solid #e2e6f0;
-    }
-
-    /* All tab buttons */
+    /* Tabs */
     button[data-baseweb="tab"] {
-        font-size: 1.0rem !important;
+        font-size: 1.05rem !important;
         font-weight: 600 !important;
-        color: #7a88a8 !important;
+        color: #6b7a99 !important;
         padding: 12px 28px !important;
-        border-radius: 10px !important;
-        transition: all 0.2s ease !important;
-        gap: 8px !important;
     }
-
-    /* Emoji inside tab — make it bigger */
-    button[data-baseweb="tab"] p {
-        font-size: 1.15rem !important;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    /* Hover */
-    button[data-baseweb="tab"]:hover {
-        background-color: #e2e8f5 !important;
-        color: #1a1a2e !important;
-        transform: translateY(-1px) !important;
-    }
-
-    /* Active tab */
     button[data-baseweb="tab"][aria-selected="true"] {
-        background-color: #ffffff !important;
         color: #1a1a2e !important;
-        box-shadow: 0 3px 12px rgba(67, 97, 238, 0.15) !important;
-        border-bottom: 3px solid #4361ee !important;
-    }
-
-    /* Hide default underline indicator */
-    div[data-testid="stTabs"] div[role="tablist"] div[data-testid="stMarkdownContainer"] {
-        display: none;
+        font-weight: 700 !important;
     }
 
     /* Dividers */
