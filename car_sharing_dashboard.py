@@ -60,13 +60,28 @@ st.markdown("""
     }
 
     /* Tabs */
+    div[data-testid="stTabs"] {
+        background-color: #f4f6fb;
+        border-radius: 12px;
+        padding: 6px 8px;
+        margin-bottom: 16px;
+    }
     button[data-baseweb="tab"] {
-        font-size: 0.92rem !important;
-        font-weight: 600 !important;
-        color: #8892a4 !important;
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        color: #6b7a99 !important;
+        padding: 10px 24px !important;
+        border-radius: 8px !important;
+        transition: background 0.2s;
+    }
+    button[data-baseweb="tab"]:hover {
+        background-color: #e2e8f5 !important;
+        color: #1a1a2e !important;
     }
     button[data-baseweb="tab"][aria-selected="true"] {
+        background-color: #ffffff !important;
         color: #1a1a2e !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10) !important;
     }
 
     /* Dividers */
