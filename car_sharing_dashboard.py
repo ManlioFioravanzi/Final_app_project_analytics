@@ -7,16 +7,35 @@ st.set_page_config(
     page_title="Car Sharing Dashboard",
     page_icon="🚗",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    /* Main background */
-    .main { background-color: #0f1117; }
+    /* ── Full app dark background ── */
+    html, body, [data-testid="stAppViewContainer"],
+    [data-testid="stApp"], .main, .block-container {
+        background-color: #0f1117 !important;
+        color: #e8ecf4 !important;
+    }
 
-    /* Metric cards */
+    /* ── Sidebar — same dark color as app ── */
+    section[data-testid="stSidebar"],
+    section[data-testid="stSidebar"] > div:first-child {
+        background-color: #0f1117 !important;
+        border-right: 1px solid #2d3250;
+    }
+
+    /* Hamburger button (☰) color */
+    [data-testid="collapsedControl"] {
+        color: #e8ecf4 !important;
+    }
+    [data-testid="collapsedControl"] svg {
+        fill: #e8ecf4 !important;
+    }
+
+    /* ── Metric cards ── */
     div[data-testid="metric-container"] {
         background-color: #1e2130;
         border: 1px solid #2d3250;
@@ -29,19 +48,13 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 0.08em;
     }
-    div[data-testid="metric-container"] div[data-testid="stMetricValue"] {
+    div[data-testid="metric-container"] [data-testid="stMetricValue"] {
         color: #e8ecf4 !important;
         font-size: 1.8rem;
         font-weight: 700;
     }
 
-    /* Sidebar */
-    section[data-testid="stSidebar"] {
-        background-color: #141622;
-        border-right: 1px solid #2d3250;
-    }
-
-    /* Section headers */
+    /* ── Section headers inside sidebar ── */
     .section-header {
         color: #7c8db5;
         font-size: 0.75rem;
@@ -52,13 +65,22 @@ st.markdown("""
         padding-top: 0.5rem;
     }
 
-    /* Tab styling */
+    /* ── Tabs ── */
     button[data-baseweb="tab"] {
         font-size: 0.9rem !important;
         font-weight: 600 !important;
+        color: #8b9fca !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #e8ecf4 !important;
     }
 
-    /* Hide default streamlit footer */
+    /* ── Dataframe ── */
+    [data-testid="stDataFrame"] { background-color: #1e2130; border-radius: 10px; }
+
+    /* ── Dividers ── */
+    hr { border-color: #2d3250 !important; }
+
     footer { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
@@ -239,7 +261,7 @@ with tab2:
     st.pydeck_chart(pdk.Deck(
         layers=[heatmap_layer],
         initial_view_state=view_state,
-        map_style="mapbox://styles/mapbox/dark-v10",
+        map_style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
     ))
 
     st.markdown("---")
@@ -295,7 +317,7 @@ with tab2:
     st.pydeck_chart(pdk.Deck(
         layers=[scatter_layer, text_layer],
         initial_view_state=city_view,
-        map_style="mapbox://styles/mapbox/dark-v10",
+        map_style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
         tooltip={
             "html": "<b>{city_name}</b><br/>Revenue: €{total_revenue}<br/>Trips: {trip_count}",
             "style": {"backgroundColor": "#1e2130", "color": "#e8ecf4", "border": "1px solid #2d3250"},
@@ -337,7 +359,7 @@ with tab2:
     st.pydeck_chart(pdk.Deck(
         layers=[arc_layer],
         initial_view_state=arc_view,
-        map_style="mapbox://styles/mapbox/dark-v10",
+        map_style="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
     ))
 
 # ══════════════════════════════════════════════════════════════════════════════
