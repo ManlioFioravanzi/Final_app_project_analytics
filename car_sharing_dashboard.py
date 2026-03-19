@@ -6,10 +6,6 @@ st.set_page_config(page_title="Car Sharing Dashboard", layout="wide")
 
 st.title("🚗 Car Sharing Dashboard")
 
-# ─────────────────────────────────────────────
-# 1. Load Data
-# ─────────────────────────────────────────────
-
 DATA_DIR = os.path.dirname(__file__)
 
 @st.cache_data
@@ -20,10 +16,6 @@ def load_data():
     return trips, cars, cities
 
 trips, cars, cities = load_data()
-
-# ─────────────────────────────────────────────
-# 2. Join all dataframes
-# ─────────────────────────────────────────────
 
 # Merge trips with cars (joining on car_id)
 trips_merged = trips.merge(
@@ -39,18 +31,10 @@ trips_merged = trips_merged.merge(
     on="city_id"
 )
 
-# ─────────────────────────────────────────────
-# 3. Clean useless columns
-# ─────────────────────────────────────────────
-
 trips_merged = trips_merged.drop(
     columns=["id_car", "city_id", "customer_id", "id", "car_id"],
     errors="ignore"
 )
-
-# ─────────────────────────────────────────────
-# 4. Update date format
-# ─────────────────────────────────────────────
 
 trips_merged["pickup_time"]   = pd.to_datetime(trips_merged["pickup_time"])
 trips_merged["dropoff_time"]  = pd.to_datetime(trips_merged["dropoff_time"])
@@ -61,10 +45,6 @@ trips_merged["trip_duration_h"] = (
     (trips_merged["dropoff_time"] - trips_merged["pickup_time"])
     .dt.total_seconds() / 3600
 )
-
-# ─────────────────────────────────────────────
-# 5. Sidebar Filters
-# ─────────────────────────────────────────────
 
 st.sidebar.header("Filters")
 
@@ -77,10 +57,6 @@ cars_brand = st.sidebar.multiselect(
 
 if cars_brand:
     trips_merged = trips_merged[trips_merged["brand"].isin(cars_brand)]
-
-# ─────────────────────────────────────────────
-# 6. Business Metrics
-# ─────────────────────────────────────────────
 
 st.subheader("Business Performance Metrics")
 
@@ -96,16 +72,8 @@ with col2:
 with col3:
     st.metric(label="Total Distance (km)", value=f"{total_distance:,.2f}")
 
-# ─────────────────────────────────────────────
-# 7. Preview dataframe
-# ─────────────────────────────────────────────
-
 st.subheader("Data Preview")
 st.write(trips_merged.head())
-
-# ─────────────────────────────────────────────
-# 8. Visualizations
-# ─────────────────────────────────────────────
 
 st.subheader("Visualizations")
 
